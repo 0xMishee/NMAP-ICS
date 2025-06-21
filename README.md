@@ -39,7 +39,20 @@ PORT    STATE SERVICE REASON
 |   Slave ID 1:
 |   Exception: 0xAB -> ILLEGAL FUNCTION
 |   Slave ID 2:
-|   Exception: 0xAB -> ILLEGAL FUNCTIO
+|   Exception: 0xAB -> ILLEGAL FUNCTION
+
+PORT    STATE SERVICE REASON
+502/tcp open  mbap    syn-ack ttl 64
+| modbus: 
+|   Slave ID 1:
+|   Coil [1] (Address 800): OFF
+|   Coil [2] (Address 801): OFF
+|   Coil [3] (Address 802): OFF
+|   Coil [4] (Address 803): OFF
+|   Coil [5] (Address 804): OFF
+|   Coil [6] (Address 805): OFF
+|   Coil [7] (Address 806): OFF
+|_  Coil [8] (Address 807): OFF
 ```
 
 ### Configure
