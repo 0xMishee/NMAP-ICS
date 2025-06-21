@@ -52,6 +52,19 @@ PORT    STATE SERVICE REASON
 |   Coil [6] (Address 805): OFF
 |   Coil [7] (Address 806): OFF
 |_  Coil [8] (Address 807): OFF
+
+PORT    STATE SERVICE REASON
+502/tcp open  mbap    syn-ack ttl 64
+| modbus: 
+|   Slave ID 1:
+|   Register Value [1]: 10560
+|   Register Value [2]: 0
+|   Register Value [3]: 128
+|   Register Value [4]: 192
+|   Register Value [5]: 128
+|   Register Value [6]: 0
+|   Register Value [7]: 0
+|_  Register Value [8]: 0
 ```
 
 ### Configure
