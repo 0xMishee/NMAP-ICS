@@ -19,6 +19,7 @@ The script communicates with devices speaking the Modbus Application Protocol (M
 nmap -p 502 --script modbus.se --script-args modbus.discovery=true,modbus.aggressive=true <target>
 ```
 
+```bash
 PORT    STATE SERVICE
 502/tcp open  mbap
 | modbus_read_id:
@@ -38,7 +39,8 @@ PORT    STATE SERVICE REASON
 |   Slave ID 1:
 |   Exception: 0xAB -> ILLEGAL FUNCTION
 |   Slave ID 2:
-|   Exception: 0xAB -> ILLEGAL FUNCTION
+|   Exception: 0xAB -> ILLEGAL FUNCTIO
+```
 
 ### Configure
 
