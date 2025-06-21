@@ -31,7 +31,6 @@ PORT    STATE SERVICE
 |   - Object 0: VendorName
 |   - Object 1: ProductCode
 |   - Object 2: Revision
-|_  Script successfully ran.
 
 PORT    STATE SERVICE REASON
 502/tcp open  mbap    syn-ack ttl 64
