@@ -35,6 +35,18 @@ This script only targets Modbus TCP/IP services. It does not support or scan Mod
 -- |   - Object 2: Revision
 -- |_  Script successfully ran.
 --
+-- PORT    STATE SERVICE REASON
+-- 502/tcp open  mbap    syn-ack ttl 64
+-- | modbus: 
+-- |   Slave ID 1:
+-- |   Register Value [1]: 10560
+-- |   Register Value [2]: 0
+-- |   Register Value [3]: 128
+-- |   Register Value [4]: 192
+-- |   Register Value [5]: 128
+-- |   Register Value [6]: 0
+-- |   Register Value [7]: 0
+-- |_  Register Value [8]: 0
 
 -- Version 0.1 - 2025-06-20 - Initial Release
 
@@ -77,7 +89,7 @@ local Config = {
     portNumber          = 502,      -- Default modbus/mbap port number.
     startAddressDigital = 800,      -- Default is based on a OpenPLC slave device.
     startAddressAnalog  = 100,      -- Default is based on a OpenPLC slave device.
-    functionCode        = 0x02,     -- 
+    functionCode        = 0x04,     -- 
     timeout             = 1000,     -- When to give up.
     protocolID          = 0x0000,   --
 }
@@ -199,8 +211,15 @@ end
 -- sends our packets away and receives them
 local callService = function(host, port, slaveID, functionCode, data)
 
+    -- decide on address to query depending on analog / digital 
+    if functionCode == 0x01 or functionCode == 0x02 then
+        startAddress = Config.startAddressDigital
+    elseif functionCode == 0x03 or functionCode == 0x04 then
+        startAddress = Config.startAddressAnalog
+    end
+
     if not data then
-        data = string.pack(">I2I2", Config.startAddressDigital, Config.quantity)
+        data = string.pack(">I2I2", startAddress, Config.quantity)
     end
 
     local request = packetAssemblyLine(slaveID, functionCode, data)
@@ -263,7 +282,7 @@ action = function(host, port)
             local snapshotResponse = callService(host, port, sID,Config.functionCode, nil)
 
             -- debug return packet
-            stdnse.print_debug(1, stdnse.tohex(snapshotResponse))
+            --stdnse.print_debug(1, stdnse.tohex(snapshotResponse))
         
             local r = gobbledygookTranslator(snapshotResponse)
             table.insert(resultLines, string.format("Slave ID %d:\n%s", sID, r))
