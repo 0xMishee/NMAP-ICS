@@ -73,15 +73,17 @@ You can tweak the behavior of the script by modifying the following internal par
 
 ```lua
 local Config = {
-    slaveID        = 1,
-    quantity       = 8,
-    portNumber     = 502,
-    startAddress   = 800,
-    functionCode   = 0x01,
-    timeout        = 1000,
-    transactionID  = 0x0001,
-    protocolID     = 0x0000,
+    quantity            = 8,        -- How many coils to read.
+    portNumber          = 502,      -- Default modbus/mbap port number.
+    startAddressAnalog  = 100,      -- Default is based on a OpenPLC slave device.
+    startAddressDigital = 800,      -- Default is based on a OpenPLC slave device.
+    timeout             = 1000,     -- When to give up.
+    protocolID          = 0x0000,   -- Always 0x0000 (reserved for future use...lol!)
+    pulse               = 1,        -- How many times it will query the specific register
+    transformer         = true,     -- Boolean, true if you want to send analog data to transform the data for suggestions.
+    ADC                 = 65535.0   -- 5V modbus value range
 }
+
 
 local sensorConfig = {
     volts = 5.0
