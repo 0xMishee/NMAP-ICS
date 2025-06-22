@@ -253,6 +253,7 @@ local callService = function(host, port, slaveID, functionCode, data)
     return response
 end
 
+-- wish I stuck with one way of representing responses...
 local function seniorFormattingExecutive(sID, r)
   if type(r) == "string" then
     -- Just return the string with the slave ID header
