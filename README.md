@@ -20,17 +20,16 @@ nmap -p 502 --script modbus.se --script-args modbus.discovery=true,modbus.aggres
 ```
 
 ```bash
-PORT    STATE SERVICE
-502/tcp open  mbap
-| modbus_read_id:
-|   Function Code: 0x2B
-|   MEI Type: 0x0E
-|   Device ID Code: 0x01
-|   Conformity Level: 1
-|   Number of ID Objects: 3
-|   - Object 0: VendorName
-|   - Object 1: ProductCode
-|   - Object 2: Revision
+ PORT    STATE SERVICE
+ 502/tcp open  mbap
+| modbus: 
+|   Slave ID 1:
+|     Conformity Level: Basic Identificaiton
+|     Number of Objects: 4
+|     Object 0x00: Witte Software
+|     Object 0x01: Modbus Slave
+|     Object 0x02: V9.5.0, Build 2346
+|     Object 0x03: https://www.modbustools.com/
 
 PORT    STATE SERVICE REASON
 502/tcp open  mbap    syn-ack ttl 64
