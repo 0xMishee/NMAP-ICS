@@ -11,7 +11,7 @@ This Nmap NSE (Nmap Scripting Engine) script is designed to discover and interac
 
 The script communicates with devices speaking the Modbus Application Protocol (MBAP) over TCP/IP. It iterates through Modbus slave IDs (1–247 by if aggressive mode is on) and sends requests to extract information such as vendor name, product code, and revision. It is particularly useful for mapping SCADA/ICS environments.
 
-You can also choose to take snapshots of the register values and send the analog values to transformers to see if 
+You can also choose to take snapshots of the register values and send the analog values to transformers to see if represents something tangible. 
 
 **NOTE:** This script does not support Modbus over serial (RTU/ASCII) interfaces.
 
