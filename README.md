@@ -1,7 +1,11 @@
-# Modbus TCP/IP Discovery NSE Script
+# ICS TCP/IP Discovery NSE Script
 
 ## Planned Feature  
 This project is intended to grow beyond Modbus by adding support for querying other ICS/OT protocols (e.g., DNP3, S7, BACnet, etc.) to assist with broader industrial network reconnaissance and asset identification.
+
+# S7Comm Discovery Script
+
+TBD
 
 # Modbus TCP/IP Discovery NSE Script
 
