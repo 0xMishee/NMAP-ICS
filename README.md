@@ -90,3 +90,15 @@ local sensorConfig = {
     volts = 5.0
 }
 ```
+
+
+# Reference Material 
+
+## S7
+
+- PDU Size: https://cache.industry.siemens.com/dl/files/599/15227599/att_840968/v1/15227599_quantitystructure_and_performancedata_v13_e.pdf
+- Error Codes: https://gmiru.com/resources/s7proto/constants.txt
+- The Siemens S7 Communication - Part 1 General Structure: https://gmiru.com/article/s7comm/
+- The Siemens S7 Communication - Part 2 Job Requests and Ack Data: https://gmiru.com/article/s7comm-part2/
+- S7 PCAPs: https://github.com/gymgit/s7-pcaps
+
