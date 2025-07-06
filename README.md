@@ -103,4 +103,5 @@ the SIMATIC NET PC Software V13: https://cache.industry.siemens.com/dl/files/599
 - s7-info.nse: https://svn.nmap.org/nmap/scripts/s7-info.nse
 - The Siemens S7 Communication - Part 2 Job Requests and Ack Data: https://gmiru.com/article/s7comm-part2/
 - S7 PCAPs: https://github.com/gymgit/s7-pcaps
+- S7 C implamentation: https://github.com/0xMishee/S7COMMM-Plus
 
