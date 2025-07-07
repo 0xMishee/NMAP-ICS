@@ -5,7 +5,32 @@ This project is intended to grow beyond Modbus by adding support for querying ot
 
 # S7Comm Discovery Script
 
-TBD
+## Description 
+
+This script is primarily designed for scanning and querying devices that communicate using the S7Comm protocol. 
+It builds upon the existing script bundled with Nmap, as well as the PLCScan tool by Positive Research (https://code.google.com/archive/p/plcscan/).
+The secondary objective is to create an easy-to-modify script that can be adapted for various other purposes, 
+with a clear and straightforward setup of the involved protocols for better readability and understanding.
+
+## Usage
+
+```bash
+nmap -p 102 --script s7comm.nse <target>
+```
+
+```bash
+PORT    STATE SERVICE  REASON
+102/tcp open  iso-tsap syn-ack ttl 64
+| s7comm: 
+|   Module: 6ES7 315-2EH14-0AB0 
+|   Basic Hardware: 6ES7 315-2EH14-0AB0 
+|   Version: 3.2.6
+|   Automation System Name: SNAP7-SERVER
+|   Module Type: CPU 315-2 PN/DP
+|   Plant Identification: 
+|   Copyright: Original Siemens Equipment
+|_  Serial Number: S C-C2UR28922012
+```
 
 # Modbus TCP/IP Discovery NSE Script
 
@@ -22,7 +47,7 @@ You can also choose to take snapshots of the register values and send the analog
 ## Usage
 
 ```bash
-nmap -p 502 --script modbus.se --script-args modbus.discovery=true,modbus.aggressive=true <target>
+nmap -p 502 --script modbus.nse --script-args modbus.discovery=true,modbus.aggressive=true <target>
 ```
 
 ```bash
