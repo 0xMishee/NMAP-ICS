@@ -52,82 +52,80 @@ local TPKT = {
 -- Connection oriented transport protocol 
 local COTP = {
 
-    headers = {},
-    tsap    = {},
-    tpdu    = {},
+    headers = {
+        len                = 0x11,       -- Length after this byte; needed to be defined manually before. Only used for CR.
+        type_dt            = 0xF0,       -- Data Transfer TPDU
+        type_cr            = 0xE0,       -- Connection Request TPDU
+        eot                = 0x80,       -- End Of Transmission bit (used in DT)
+        reserved           = 0x00,       -- Reserved, typically 0x00, functions as padding
+        src_ref            = 0x00,       -- Source Reference
+        dst_ref            = 0x00,       -- Destination Reference
+        class              = 0x14,       -- Class 0 (flow control on)
+    },
 
-    -- Headers
-    len                = 0x11,       -- Length after this byte; needed to be defined manually before. Only used for CR.
-    type_dt            = 0xF0,       -- Data Transfer TPDU
-    type_cr            = 0xE0,       -- Connection Request TPDU
-    eot                = 0x80,       -- End Of Transmission bit (used in DT)
-    reserved           = 0x00,       -- Reserved, typically 0x00, functions as padding
-    src_ref            = 0x00,       -- Source Reference
-    dst_ref            = 0x00,       -- Destination Reference
-    class              = 0x14,       -- Class 0 (flow control on)
+    tsap    = {
+        -- Calling identifier
+        calling_code  = 0xC1,       -- Calling who
+        calling_len   = 0x02,       -- TSAP length
+        calling_pg_pc = 0x0100,     -- PG/PC device
+        
+        -- Identifier for whom am I wish to call
+        called_code   = 0xC2,       -- Called
+        called_len    = 0x02,       -- TSAP length
+        called_pg_pc  = 0x0102,     -- PG/PC device
+    },
 
-    -- Calling identifier 
-    tsap_calling_code  = 0xC1,       -- Calling who
-    tsap_calling_len   = 0x02,       -- TSAP length
-    tsap_calling_pg_pc = 0x0100,     -- PG/PC device
-
-    -- Identifier for whom am I wish to call
-    tsap_called_code   = 0xC2,       -- Called
-    tsap_called_len    = 0x02,       -- TSAP length
-    tsap_called_pg_pc  = 0x0102,     -- PG/PC device
-
-    tpdu_size_code     = 0xC0,       -- code
-    tpdu_size_len      = 0x01,       -- length
-    tpdu_size_val      = 0x0A,       -- 0x0A = 1024 bytes
+    tpdu    = {
+        size_code     = 0xC0,       -- code
+        size_len      = 0x01,       -- length
+        size_val      = 0x0A,       -- 0x0A = 1024 bytes
+    },
 }
-
 --
 local S7 = {
 
-    headers     = {},
-    parameter   = {},
-    data        = {},
+    headers     = {
+        id               = 0x32,       -- Protocol ID; always 0x32 for S7 communication
+        job_request      = 0x01,       -- Job
+        read_request     = 0x07,       -- Read
+        reserved         = 0x0000,     -- Always set to 0x0000
+        pdu_ref          = 0x0000,     -- Transaction ID; can be 0. Helps keeping track of packets, incremental.
+        param_len        = 0x0008,     -- Length of the parameters in bytes
+        data_len_nd      = 0x0000,     -- Length of the data section; 0 if no data in request.
+        data_len_rd      = 0x0008,     -- Reading SZL 
 
-    header_id               = 0x32,       -- Protocol ID; always 0x32 for S7 communication
-    header_job_request      = 0x01,       -- Job
-    header_read_request     = 0x07,       -- Read
-    header_reserved         = 0x0000,     -- Always set to 0x0000
-    header_pdu_ref          = 0x0000,     -- Transaction ID; can be 0. Helps keeping track of packets, incremental.
-    header_param_len        = 0x0008,     -- Length of the parameters in bytes
+    },
+    
+    parameter   = {
+        function_codes = {
+            setup_communication   = 0xf0,       -- Setup Communication function code
+            cpu_diagnostics       = 0x00,       -- Prepares to querying CPU information
+ 
+      },
+      
+        item_count        = 0x01,
+        variable_spec     = 0x12,
+        len_address_spec  = 0x04,
+        syntax_id         = 0x11,
+        type_request_cpu  = 0x44,
+        sub_func_r_szl    = 0x01,
+        sequence_nr       = 0x00,
+        reserved          = 0x00,       -- Reserved, usually 0.
+        amq_calling       = 0x0001,     -- AMQ Calling (PDU reference from sender)
+        amq_called        = 0x0001,     -- AMQ Called (PDU reference from receiver)
+        pdu_size          = 0x01e0,     -- PDU size, determines how many concurrent sessions can be made; 112, 240, 480, 960 or 1920 bytes.
 
-    -- Data lengths
-    header_data_len_nd      = 0x0000,     -- Length of the data section; 0 if no data in request.
-    header_data_len_rd      = 0x0008,     -- Reading SZL 
-
-
-    -- Parameters
-    -- S7 functions
-    parameter_func_sc           = 0xf0,       -- Setup Communication function code
-    parameter_func_cpu          = 0x00,       -- Prepares to querying CPU information
-
-    parameter_item_count        = 0x01,
-    parameter_variable_spec     = 0x12,
-    parameter_len_address_spec  = 0x04,
-    parameter_syntax_id         = 0x11,
-    parameter_type_request_cpu  = 0x44,
-    parameter_sub_func_r_szl    = 0x01,
-    parameter_sequence_nr       = 0x00,
+    },
 
 
-    --
-    parameter_reserved          = 0x00,       -- Reserved, usually 0.
-    parameter_amq_calling       = 0x0001,     -- AMQ Calling (PDU reference from sender)
-    parameter_amq_called        = 0x0001,     -- AMQ Called (PDU reference from receiver)
-    parameter_pdu_size          = 0x01e0,     -- PDU size, determines how many concurrent sessions can be made; 112, 240, 480, 960 or 1920 bytes.
-
-    -- Data
-    data_return_code                = 0xff,
-    data_transport_size             = 0x09,
-    data_len                        = 0x0004,
-    data_type_diag_cpu_mod_id       = 0x0011, -- Module identification
-    data_type_diag_cpu_comp_id      = 0x001c, -- Component identification
-    data_szl_index                  = 0x0001,
-
+    data        = {
+        return_code                = 0xff,
+        transport_size             = 0x09,
+        len                        = 0x0004,
+        type_diag_cpu_mod_id       = 0x0011, -- Module identification
+        type_diag_cpu_comp_id      = 0x001c, -- Component identification
+        szl_index                  = 0x0001,
+     },
 
 }
 
@@ -188,12 +186,18 @@ end
 local cotp_session = function (socket)
 
     -- COTP header
-    local cotp_header   = string.pack(">BBBBBB", COTP.len, COTP.type_cr, COTP.reserved, COTP.src_ref, COTP.dst_ref, COTP.class)
+    local cotp_header   = string.pack(">BBBBBB",
+                          COTP.headers.len,
+                          COTP.headers.type_cr,
+                          COTP.headers.reserved,
+                          COTP.headers.src_ref,
+                          COTP.headers.dst_ref,
+                          COTP.headers.class)
 
     -- COTP parameters
-    local cotp_size     = string.pack(">BBB", COTP.tpdu_size_code, COTP.tpdu_size_len, COTP.tpdu_size_val)
-    local cotp_calling  = string.pack(">BBBH", COTP.reserved, COTP. tsap_calling_code, COTP.tsap_calling_len, COTP.tsap_calling_pg_pc)
-    local cotp_called   = string.pack(">BBH", COTP.tsap_called_code, COTP.tsap_called_len, COTP.tsap_called_pg_pc)
+    local cotp_size     = string.pack(">BBB", COTP.tpdu.size_code, COTP.tpdu.size_len, COTP.tpdu.size_val)
+    local cotp_calling  = string.pack(">BBBH", COTP.headers.reserved, COTP.tsap.calling_code, COTP.tsap.calling_len, COTP.tsap.calling_pg_pc)
+    local cotp_called   = string.pack(">BBH", COTP.tsap.called_code, COTP.tsap.called_len, COTP.tsap.called_pg_pc)
 
     -- Assembly!
     local cotp_packet   = cotp_header .. cotp_calling .. cotp_called .. cotp_size
@@ -217,25 +221,25 @@ end
 local rosctr_session = function (socket)
 
     -- COTP header
-    local cotp_header   = string.pack(">BBB", COTP.len, COTP.type_dt, COTP.eot)
+    local cotp_header   = string.pack(">BBB", COTP.headers.len, COTP.headers.type_dt, COTP.headers.eot)
 
     -- S7Comm header
     local s7_header     = string.pack(">BBHHHH",
-            S7.header_id,
-            S7.header_job_request,
-            S7.header_reserved,
-            S7.header_pdu_ref,
-            S7.header_param_len,
-            S7.header_data_len_nd
+            S7.headers.id,
+            S7.headers.job_request,
+            S7.headers.reserved,
+            S7.headers.pdu_ref,
+            S7.headers.param_len,
+            S7.headers.data_len_nd
         )
 
     -- S7Comm parameters ( defining data type request )
     local s7_parameter  = string.pack(">BBHHH",
-            S7.parameter_func_sc,
-            S7.parameter_reserved,
-            S7.parameter_amq_calling,
-            S7.parameter_amq_called,
-            S7.parameter_pdu_size
+            S7.parameter.function_codes.setup_communication,
+            S7.parameter.reserved,
+            S7.parameter.amq_calling,
+            S7.parameter.amq_called,
+            S7.parameter.pdu_size
         )
 
     local cotp_packet   = cotp_header .. s7_header .. s7_parameter
@@ -258,42 +262,42 @@ end
 local read_szl = function (socket)
 
 
-    local cotp_header   = string.pack(">BBB", COTP.len, COTP.type_dt, COTP.eot)
+    local cotp_header   = string.pack(">BBB", COTP.headers.len, COTP.headers.type_dt, COTP.headers.eot)
 
     local s7_header     = string.pack(">BBHHHH",
-                        S7.header_id,
-                        S7.header_read_request,
-                        S7.header_reserved,
-                        S7.header_pdu_ref,
-                        S7.header_param_len,
-                        S7.header_data_len_rd
+                        S7.headers.id,
+                        S7.headers.read_request,
+                        S7.headers.reserved,
+                        S7.headers.pdu_ref,
+                        S7.headers.param_len,
+                        S7.headers.data_len_rd
     )
 
     local s7_parameter  = string.pack(">BBBBBBBB",
-                        S7.parameter_func_cpu,
-                        S7.parameter_item_count,
-                        S7.parameter_variable_spec,
-                        S7.parameter_len_address_spec,
-                        S7.parameter_syntax_id,
-                        S7.parameter_type_request_cpu,
-                        S7.parameter_sub_func_r_szl,
-                        S7.parameter_sequence_nr
+                        S7.parameter.function_codes.cpu_diagnostics,
+                        S7.parameter.item_count,
+                        S7.parameter.variable_spec,
+                        S7.parameter.len_address_spec,
+                        S7.parameter.syntax_id,
+                        S7.parameter.type_request_cpu,
+                        S7.parameter.sub_func_r_szl,
+                        S7.parameter.sequence_nr
     )
 
     local s7_data_module = string.pack(">BBHHH",
-                        S7.data_return_code,
-                        S7.data_transport_size,
-                        S7.data_len,
-                        S7.data_type_diag_cpu_mod_id,
-                        S7.data_szl_index
+                        S7.data.return_code,
+                        S7.data.transport_size,
+                        S7.data.len,
+                        S7.data.type_diag_cpu_mod_id,
+                        S7.data.szl_index
     )
 
     local s7_data_component = string.pack(">BBHHH",
-                        S7.data_return_code,
-                        S7.data_transport_size,
-                        S7.data_len,
-                        S7.data_type_diag_cpu_comp_id,
-                        S7.data_szl_index
+                        S7.data.return_code,
+                        S7.data.transport_size,
+                        S7.data.len,
+                        S7.data.type_diag_cpu_comp_id,
+                        S7.data.szl_index
     )
 
     local cotp_packet_module        = cotp_header .. s7_header .. s7_parameter .. s7_data_module
@@ -308,13 +312,15 @@ local read_szl = function (socket)
     local response_module, response_status_module = call(socket, tpkt_packet_module, 6)
     local response_component, response_status_component = call(socket, tpkt_packet_component, 6)
 
+    local read_szl_response_status = {response_status_module, response_status_component}
+
     stdnse.print_debug(1, "SZL Module Sending: %s", stdnse.tohex(tpkt_packet_module))
     stdnse.print_debug(1, "SZL Module Received: %s", stdnse.tohex(response_module))
 
     stdnse.print_debug(1, "SZL Component Sending: %s", stdnse.tohex(tpkt_packet_component))
     stdnse.print_debug(1, "SZL Component Received: %s", stdnse.tohex(response_component))
 
-    return response_component, response_module
+    return response_component, response_module, read_szl_response_status
 
 end
 
@@ -369,19 +375,35 @@ end
 action = function(host, port)
 
     -- Lock in and dial!
-    local socket = assert(dial(host, port), "Failed to connect")
+    local socket = assert(dial(host, port), "Failed to established connection")
 
     -- Setup required sessions, written with assert to avoid to many lengthy false/true checks. 
-    local cotp_response = assert(cotp_session(socket))
+    local cotp_response, cotp_response_status = cotp_session(socket)
+    if cotp_response_status == false then
+        socket:close()
+        return nil
+    end
+    
+    local rosctr_response, rosctr_response_status = rosctr_session(socket)
+    if rosctr_response_status == false then
+        socket:close()
+        return nil
+    end
 
-    local rosctr_response = assert(rosctr_session(socket))
-
+      
     -- Fetch Diagnostics data from PLC
-    local read_szl_component, read_szl_module = assert(read_szl(socket))
+    local read_szl_component, read_szl_module, read_szl_response_status = read_szl(socket)
+    if not read_szl_response_status[1] or not read_szl_response_status[2] then
+        socket:close()
+        return nil
+    end
+
+    socket:close()
 
     -- Create table and send received data to be parsed.
     local discombobulate = stdnse.output_table()
     discombobulate = transponster(read_szl_component, read_szl_module, discombobulate)
-
+    
     return discombobulate
+
 end
