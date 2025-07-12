@@ -366,7 +366,7 @@ local transponster = function(szl_component, szl_module, discombobulate)
 
     for key, value in pairs(discombobulate) do 
         if isempty(discombobulate[key]) then
-            discombobulate[key] == nil
+            discombobulate[key] = nil
         end 
     end 
 
