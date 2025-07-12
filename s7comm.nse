@@ -158,7 +158,7 @@ end
 ---
 -- @param socket, Opened socket for communication
 -- @param message, Hexmessage that you want to send
--- @bytes 
+-- @param bytes, Requested amount of bytes you want to read
 -- @return response, response_status, Returns hexstring from the PLC.
 local call = function (socket, message ,bytes)
 
@@ -363,6 +363,12 @@ local transponster = function(szl_component, szl_module, discombobulate)
     if #szl_component > 176 + offset then
         discombobulate['Serial Number'] = string.unpack("z", szl_component, 176 + offset)
     end
+
+    for key, value in pairs(discombobulate) do 
+        if isempty(discombobulate[key]) then
+            discombobulate[key] == nil
+        end 
+    end 
 
     return discombobulate
 end
