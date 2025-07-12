@@ -13,7 +13,7 @@ with a clear and straightforward setup of the involved protocols for better read
 
 author = "Martin Jakobsson"
 license = "Same as Nmap--See https://nmap.org/book/man-legal.html"
-categories = {"discovery", "brute", "intrusive"}
+categories = {"discovery", "intrusive"}
 
 ---
 -- @usage
