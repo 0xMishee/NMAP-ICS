@@ -8,7 +8,7 @@ This project is intended to grow beyond Modbus by adding support for querying ot
 ## Description 
 
 This script is primarily designed for scanning and querying devices that communicate using the S7Comm protocol. 
-It builds upon the existing script bundled with Nmap, as well as the PLCScan tool by Positive Research (https://code.google.com/archive/p/plcscan/).
+It builds upon the existing script bundled with Nmap, as well as the PLCScan tool by Positive Research.
 The secondary objective is to create an easy-to-modify script that can be adapted for various other purposes, 
 with a clear and straightforward setup of the involved protocols for better readability and understanding.
 
