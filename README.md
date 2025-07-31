@@ -8,7 +8,7 @@ This project is intended to grow beyond Modbus by adding support for querying ot
 ## Description 
 
 This script is primarily designed for scanning and querying devices that communicate using the S7Comm protocol. 
-It builds upon the existing script bundled with Nmap, as well as the PLCScan tool by Positive Research (https://code.google.com/archive/p/plcscan/).
+It builds upon the existing script bundled with Nmap, as well as the PLCScan tool by Positive Research.
 The secondary objective is to create an easy-to-modify script that can be adapted for various other purposes, 
 with a clear and straightforward setup of the involved protocols for better readability and understanding.
 
@@ -178,18 +178,3 @@ local sensorConfig = {
     volts = 5.0
 }
 ```
-
-
-# Reference Material 
-
-## S7
-
-- Configuration limits for products of 
-the SIMATIC NET PC Software V13: https://cache.industry.siemens.com/dl/files/599/15227599/att_840968/v1/15227599_quantitystructure_and_performancedata_v13_e.pdf
-- Error Codes: https://gmiru.com/resources/s7proto/constants.txt
-- The Siemens S7 Communication - Part 1 General Structure: https://gmiru.com/article/s7comm/
-- s7-info.nse: https://svn.nmap.org/nmap/scripts/s7-info.nse
-- The Siemens S7 Communication - Part 2 Job Requests and Ack Data: https://gmiru.com/article/s7comm-part2/
-- S7 PCAPs: https://github.com/gymgit/s7-pcaps
-- S7 C implementation: https://github.com/0xMishee/S7COMMM-Plus
-

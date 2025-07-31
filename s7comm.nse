@@ -13,7 +13,7 @@ with a clear and straightforward setup of the involved protocols for better read
 
 author = "Martin Jakobsson"
 license = "Same as Nmap--See https://nmap.org/book/man-legal.html"
-categories = {"discovery", "brute", "intrusive"}
+categories = {"discovery", "intrusive"}
 
 ---
 -- @usage
@@ -366,7 +366,7 @@ local transponster = function(szl_component, szl_module, discombobulate)
 
     for key, value in pairs(discombobulate) do 
         if isempty(discombobulate[key]) then
-            discombobulate[key] == nil
+            discombobulate[key] = nil
         end 
     end 
 
