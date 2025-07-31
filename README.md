@@ -15,7 +15,7 @@ with a clear and straightforward setup of the involved protocols for better read
 ## Usage
 
 ```bash
-nmap -p 102 --script s7comm.nse <target>
+nmap -p 102 --script s7comm.nse <target/s>
 ```
 
 ```bash
@@ -30,6 +30,65 @@ PORT    STATE SERVICE  REASON
 |   Plant Identification: 
 |   Copyright: Original Siemens Equipment
 |_  Serial Number: S C-C2UR28922012
+```
+# DNP3
+
+## Description
+
+This implementation uses OpenDNP3 and the DNP 3.0 Remote Communication Protocol for REC 523. It is primarily designed to identify active DNP3 source addresses by sending and analyzing data link layer packets. However, it can also be easily modified to send application layer packets.
+
+The most notable difference between this script and others available online is that it does not send a predefined byte string. Instead, it dynamically generates the request string based on the user-selected address range, calculating the CRC-16 at runtime.
+## Usage
+
+```bash
+nmap -p 20000 --script dnp3.nse <target/s>
+```
+
+```bash
+PORT      STATE SERVICE REASON
+20000/tcp open  dnp     syn-ack ttl 128
+| dnp3: 
+|   Control Code: LINK_STATUS
+|   Source Address: 250
+|_  Destination Address: 0
+```
+
+### Outstation Simulation 
+```bash
+	MASTER [31-Jul-2025 18:29:27.841] [TCP]: Request Link Status                                                                     
+	DATA LINK Frame Octets (10)                                                                                                      
+	05 64 05 C9 FA 00 00 00{12 DF}                                                                  
+	Function                 Length  Control                       Source  Destination                                               
+	Request Link Status      5       DIR:1 PRM:1 FCV:0             0       250                                                       
+
+	OUTSTATION [31-Jul-2025 18:29:27.903] [TCP]: Link Status                                                                         
+	DATA LINK Frame Octets (10)                                                                                                      
+	05 64 05 0B 00 00 FA 00{80 B3}                                                                  
+	Function                 Length  Control                       Source  Destination                                               
+	Link Status              5       DIR:0 PRM:0 FCV:0             250     0                                                         
+```
+
+```bash
+MASTER [31-Jul-2025 18:29:27.934] [TCP]: Unconfirmed User Data                                                                   
+DATA LINK Frame Octets (10)                                                                                                      
+05 64 05 C4 FA 00 00 00{45 25}                                                                  
+Function                 Length  Control                       Source  Destination                                               
+Unconfirmed User Data    5       DIR:1 PRM:1 FCV:0             0       250                                                       
+
+OUTSTATION [31-Jul-2025 18:29:28.012] [TCP]: Response: Time_delay                                                                
+DATA LINK Frame Octets (23)                                                                                                      
+05 64 10 44 00 00 FA 00{29 BF}C0 00 81 90 00 34 01 07 01 88 13{C1 6A}                           
+Function                 Length  Control                       Source  Destination                                               
+Unconfirmed User Data    16      DIR:0 PRM:1 FCV:0             250     0                                                         
+Transport: FIN:1 FIR:1 SEQ:0                                                                                                     
+APPLICATION Layer                                                                                                                
+Function           Control              Internal Indications                                                                     
+Response           FIR:0 FIN:0 CON:0    Need_Time Restart                                                                        
+									UNS:0 SEQ:0                                                                                                   
+Object                       Variation                     Qualifier                                                             
+52:Time Delay                1:Coarse                      0x07:Count 1                                                          
+ Index Value          Flags                    Time                                                                             
+ 0                                             5000 milliseconds          
 ```
 
 # Modbus TCP/IP Discovery NSE Script
@@ -47,7 +106,7 @@ You can also choose to take snapshots of the register values and send the analog
 ## Usage
 
 ```bash
-nmap -p 502 --script modbus.nse --script-args modbus.discovery=true,modbus.aggressive=true <target>
+nmap -p 502 --script modbus.nse --script-args modbus.discovery=true,modbus.aggressive=true <target/s>
 ```
 
 ```bash
