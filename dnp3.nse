@@ -168,7 +168,7 @@ portrule = shortport.port_or_service(config.portnumber, "dnp3","tcp")
 --- 
 -- Calculates the hex value for the control field. Defaults to REQUEST_LINK_STATUS.
 -- @param none
--- @returns control_value, hex value for the control field in data link layer.
+-- @return control_value, hex value for the control field in data link layer.
 local data_link_control_calc = function(function_code)
   return 
   (data_link_header.control.direction << 7) |
@@ -218,7 +218,7 @@ end
 -- Switch places for lsb and msb. 
 -- Reference: https://cdn.chipkin.com/assets/uploads/imports/resources/DNP3QuickReference.pdf
 -- @param data, hex 
--- @returns result, hex
+-- @return result, hex
 local lsb_msb_switch = function(data)
   local data_hex = string.format("%04x", data)
   local data_BE_hex = data_hex:sub(3, 4) .. data_hex:sub(1, 2)
@@ -284,7 +284,7 @@ end
 ---
 -- Takes whatever the response it and parses it according to expected response. 
 -- @param data_response, data_response packet from comm.exchange. 
--- @returns output_table, table with the parsed output.
+-- @return output_table, table with the parsed output.
 local parse_data_link_response = function(data_response, result)
 	
 	local control_code = control_codes[string.unpack("B", data_response, 4)]
@@ -298,7 +298,7 @@ end
 ---
 -- Sends a cold restart command.
 -- @param addr, current DNP3 Active address. 
--- @returns chaos (connection_status, data_response), return status and value from sending package. 
+-- @return chaos (connection_status, data_response), return status and value from sending package. 
 local cold_restart = function(host, port, addr)
 
 	local cold_restart_package = ""
